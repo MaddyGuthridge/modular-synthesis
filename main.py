@@ -2,24 +2,19 @@
 Modular Synthesis
 =================
 
-A simple program for generating and manipulating waveforms. Used to demonstrate
-modules for COMP1010 at UNSW.
+A simple program for generating and manipulating waveforms.
 
-Waveform generation:
-    The waveform generation functions generate lists of sample points, where a
-    sample is taken every 10000th of a second. Only 1/10th of a second (1000
-    samples) is generated for the sake of performance.
-
-Waveform printing:
-    The waveforms are printed as one character per sample. The samples are cut
-    short so as not to clutter the terminal.
+This project isn't intended to be performant. It's just a little demo I made
+for fun.
 
 Made with <3 by Miguel Guthridge
 """
+import wave
+import struct
 import generators as gen
 import operators as op
 from print_waveform import print_waveform
-from consts import Waveform
+from consts import Waveform, SAMPLE_RATE
 
 
 WaveformsLibrary = dict[str, Waveform]
@@ -32,20 +27,21 @@ class InvalidInput(ValueError):
 def print_help():
     print("\n".join([
         "Available commands:",
-        " gen [kind] [freq] [name] - generate a waveform",
-        " op add [wav1] [wav2] [name] - add [wav1] and [wav2] together",
-        " op sub [wav1] [wav2] [name] - subtract [wav1] from [wav2]",
-        " op norm [wav] [name] - normalise [wav]",
-        " op scale [wav] [amount] [name] - scale [wav] by [amount]",
-        " op stretch [wav] [amount] [name] - stretch [wav] by [amount]",
-        " p [wav] - print the waveform [wav]",
-        " l - list stored waveforms",
-        " q - quit",
+        " - gen [kind] [freq] [name] - generate a waveform",
+        " - op add [wav1] [wav2] [name] - add [wav1] and [wav2] together",
+        " - op sub [wav1] [wav2] [name] - subtract [wav1] from [wav2]",
+        " - op norm [wav] [name] - normalise [wav]",
+        " - op scale [wav] [amount] [name] - scale [wav] by [amount]",
+        " - op stretch [wav] [amount] [name] - stretch [wav] by [amount]",
+        " - p [wav] - print the waveform [wav]",
+        " - s [wav] [file] - save the waveform [wav] to [file]",
+        " - l - list loaded waveforms",
+        " - q - quit",
         "",
         "Where:",
-        " [kind] - kind of waveform to generate (sine, saw, square)",
-        " [freq] - frequency in Hz",
-        " [name] - name to associate with waveform",
+        " - [kind] - kind of waveform to generate (sine, saw, square)",
+        " - [freq] - frequency in Hz",
+        " - [name] - name to associate with waveform",
         "",
     ]))
 
@@ -92,6 +88,21 @@ def handle_operators(
             raise InvalidInput("Unknown operator kind")
 
 
+def save_wave(wav: Waveform, filename: str):
+    """
+    Save a waveform to the given filename
+    """
+    # https://www.tutorialspoint.com/read-and-write-wav-files-using-python-wave
+    with wave.open(filename, "wb") as f:
+        f.setnchannels(1)
+        f.setsampwidth(2)
+        f.setframerate(SAMPLE_RATE)
+        for v in wav:
+            value = round(v * 32767)
+            data = struct.pack('<h', value)
+            f.writeframesraw(data)
+
+
 def main() -> None:
     """
     Main loop of the program
@@ -119,6 +130,10 @@ def main() -> None:
                 case "p":
                     name = args[0]
                     print_waveform(wavs[name])
+                case "s":
+                    name = args[0]
+                    file = args[1]
+                    save_wave(wavs[name], file)
                 case "l":
                     if len(wavs) == 0:
                         print("No waveforms generated")

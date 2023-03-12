@@ -5,7 +5,7 @@ generators
 Code for generating waveforms
 """
 import math
-from consts import SAMPLE_LENGTH, SAMPLE_FREQUENCY, Waveform
+from consts import SAMPLE_LENGTH, SAMPLE_RATE, Waveform
 
 
 def sine(frequency: int) -> Waveform:
@@ -16,7 +16,7 @@ def sine(frequency: int) -> Waveform:
     for i in range(SAMPLE_LENGTH):
         samples.append(
             math.sin(
-                i / SAMPLE_FREQUENCY
+                i / SAMPLE_RATE
                 * 2 * math.pi
                 * frequency
             ))
@@ -28,7 +28,7 @@ def saw(frequency: int) -> Waveform:
     Generate a saw wave at the given frequency
     """
     samples = []
-    alternation_rate = 1 / frequency * SAMPLE_FREQUENCY
+    alternation_rate = 1 / frequency * SAMPLE_RATE
     for i in range(SAMPLE_LENGTH):
         # Negate values so saw edge is rising
         samples.append(-(
@@ -44,7 +44,7 @@ def square(frequency: int) -> Waveform:
     Generate a square wave at the given frequency
     """
     samples = []
-    alternation_rate = 1 / frequency * SAMPLE_FREQUENCY
+    alternation_rate = 1 / frequency * SAMPLE_RATE
     for i in range(SAMPLE_LENGTH):
         if i % alternation_rate > alternation_rate / 2:
             samples.append(1.0)

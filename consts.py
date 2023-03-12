@@ -5,7 +5,7 @@
 # How many samples to generate
 SAMPLE_LENGTH = 24_000
 # The frequency of the samples in the waveform
-SAMPLE_FREQUENCY = 24_000
+SAMPLE_RATE = 24_000
 
 # Printing waveforms
 # ==================

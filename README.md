@@ -1,3 +1,6 @@
 # Modular Synthesis
 
-A simple waveform manipulation program, used to demonstrate Python modules in UNSW's COMP1010 course.
+A simple program for generating and manipulating waveforms.
+
+This project isn't intended to be performant. It's just a little demo I made
+for fun.

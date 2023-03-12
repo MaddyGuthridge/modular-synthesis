@@ -2,7 +2,7 @@
 Print waveform
 ==============
 
-Code for printing waveforms to the user's terminal
+Code for printing waveforms to the user's terminal.
 """
 from os import get_terminal_size
 from colorama import Fore
@@ -13,6 +13,9 @@ from consts import WAVE_HEIGHT, WAVE_CHAR, SPACE_CHAR
 def print_waveform(wav: list[float]):
     """
     Prints the given waveform to the output.
+
+    Waveforms are printed as one character per sample. The samples are trimmed
+    to avoid cluttering the terminal.
 
     Any clipping values (outside the range -1..1) are printed as red
     """
