@@ -2,8 +2,6 @@
 # Generating waveforms
 # ====================
 
-# How many samples to generate
-SAMPLE_LENGTH = 24_000
 # The frequency of the samples in the waveform
 SAMPLE_RATE = 24_000
 

@@ -27,26 +27,27 @@ class InvalidInput(ValueError):
 def print_help():
     print("\n".join([
         "Available commands:",
-        " - gen [kind] [freq] [name] - generate a waveform",
+        " - gen [kind] [freq] [length] [name] - generate a waveform",
         " - op add [wav1] [wav2] [name] - add [wav1] and [wav2] together",
         " - op sub [wav1] [wav2] [name] - subtract [wav1] from [wav2]",
         " - op norm [wav] [name] - normalise [wav]",
         " - op scale [wav] [amount] [name] - scale [wav] by [amount]",
         " - op stretch [wav] [amount] [name] - stretch [wav] by [amount]",
-        " - p [wav] - print the waveform [wav]",
-        " - s [wav] [file] - save the waveform [wav] to [file]",
-        " - l - list loaded waveforms",
-        " - q - quit",
+        " - print [wav] - print the waveform [wav]",
+        " - save [wav] [file] - save the waveform [wav] to [file]",
+        " - list - list loaded waveforms",
+        " - quit",
         "",
         "Where:",
         " - [kind] - kind of waveform to generate (sine, saw, square)",
         " - [freq] - frequency in Hz",
+        " - [length] - length of sample",
         " - [name] - name to associate with waveform",
         "",
     ]))
 
 
-def handle_generators(kind: str, freq: int) -> Waveform:
+def handle_generators(kind: str, freq: int, length: float) -> Waveform:
     match kind:
         case "sine" | "sin":
             generator = gen.sine
@@ -56,7 +57,7 @@ def handle_generators(kind: str, freq: int) -> Waveform:
             generator = gen.square
         case _:
             raise InvalidInput("Unknown generator kind")
-    return generator(freq)
+    return generator(freq, length)
 
 
 def handle_operators(
@@ -119,28 +120,29 @@ def main() -> None:
         # Dodgy error handling
         try:
             match cmd:
-                case "gen":
+                case "g" | "gen":
                     kind = args[0]
                     freq = int(args[1])
+                    length = float(args[1])
                     name = args[2]
-                    wavs[name] = handle_generators(kind, freq)
-                case "op":
+                    wavs[name] = handle_generators(kind, freq, length)
+                case "o" | "op":
                     kind, *args, name = args
                     wavs[name] = handle_operators(kind, args, wavs)
-                case "p":
+                case "p" | "print":
                     name = args[0]
                     print_waveform(wavs[name])
-                case "s":
+                case "s" | "save":
                     name = args[0]
                     file = args[1]
                     save_wave(wavs[name], file)
-                case "l":
+                case "l" | "list":
                     if len(wavs) == 0:
                         print("No waveforms generated")
                     else:
                         for name in wavs.keys():
                             print(f" - {name}")
-                case "q":
+                case "q" | "quit" | "exit":
                     print("Goodbye!")
                     return
                 case _:
@@ -157,4 +159,4 @@ if __name__ == "__main__":
     try:
         main()
     except EOFError:
-        print("Goodbye!")
+        print("\nGoodbye!")
