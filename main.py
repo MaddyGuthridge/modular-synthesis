@@ -9,6 +9,7 @@ for fun.
 
 Made with <3 by Miguel Guthridge
 """
+import sys
 import wave
 import struct
 import generators as gen
@@ -37,6 +38,7 @@ def print_help():
         " - print [wav] - print the waveform [wav]",
         " - save [wav] [file] - save the waveform [wav] to [file]",
         " - list - list loaded waveforms",
+        " - help - display this message",
         " - quit",
         "",
         "Where:",
@@ -113,14 +115,20 @@ def main() -> None:
     """
     Main loop of the program
     """
-    print("Modular Synthesis")
-    print()
-    print_help()
+    # Don't print if not interactive
+    if sys.stdin.isatty():
+        print("Modular Synthesis")
+        print()
+        print_help()
 
     wavs: dict[str, list[float]] = {}
 
     while True:
-        cmd, *args = input("Enter a command: ").split()
+        if sys.stdin.isatty():
+            prompt = "Enter a command: "
+        else:
+            prompt = ""
+        cmd, *args = input(prompt).split()
 
         # Dodgy error handling
         try:
@@ -147,6 +155,8 @@ def main() -> None:
                     else:
                         for name in wavs.keys():
                             print(f" - {name}")
+                case "h" | "help":
+                    print_help()
                 case "q" | "quit" | "exit":
                     print("Goodbye!")
                     return
@@ -164,4 +174,5 @@ if __name__ == "__main__":
     try:
         main()
     except EOFError:
-        print("quit\nGoodbye!")
+        if sys.stdin.isatty():
+            print("quit\nGoodbye!")
