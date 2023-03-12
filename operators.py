@@ -5,7 +5,8 @@ operators
 Code for operating on waveforms
 """
 import math
-from consts import Waveform, SAMPLE_LENGTH
+from consts import Waveform
+from itertools import zip_longest
 
 
 def normalise(wav: Waveform) -> Waveform:
@@ -23,20 +24,20 @@ def normalise(wav: Waveform) -> Waveform:
 
 def add(wav1: Waveform, wav2: Waveform) -> Waveform:
     """
-    Add two waveforms together and return the result
+    Add values from wav1 and wav2 and return the result
     """
     result = []
-    for v1, v2 in zip(wav1, wav2):
+    for v1, v2 in zip_longest(wav1, wav2, fillvalue=0.0):
         result.append(v1 + v2)
     return result
 
 
 def subtract(wav1: Waveform, wav2: Waveform) -> Waveform:
     """
-    Subtract wav2 from wav1 and return the result
+    Subtract values from wav1 and wav2 and return the result
     """
     result = []
-    for v1, v2 in zip(wav1, wav2):
+    for v1, v2 in zip_longest(wav1, wav2, fillvalue=0.0):
         result.append(v1 - v2)
     return result
 
@@ -54,13 +55,10 @@ def stretch(wav: Waveform, factor: float) -> Waveform:
     Stretch the given waveform by factor, then return the result
     """
     result = []
-    for i in range(SAMPLE_LENGTH):
+    result_length = int(len(wav) * factor)
+    for i in range(result_length):
         # Calculate sample position in original sample
         og_index = i / factor
-
-        # Prevent ourselves from going past the end of the sample by pretending
-        # the samples loop infinitely
-        og_index %= SAMPLE_LENGTH
 
         # Grab the two samples around the required point
         start_val = wav[math.floor(og_index)]
@@ -77,3 +75,10 @@ def stretch(wav: Waveform, factor: float) -> Waveform:
         )
 
     return result
+
+
+def append(wav1: Waveform, wav2: Waveform) -> Waveform:
+    """
+    Append wav1 to wav2
+    """
+    return wav1 + wav2

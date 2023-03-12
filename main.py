@@ -28,11 +28,12 @@ def print_help():
     print("\n".join([
         "Available commands:",
         " - gen [kind] [freq] [length] [name] - generate a waveform",
-        " - op add [wav1] [wav2] [name] - add [wav1] and [wav2] together",
-        " - op sub [wav1] [wav2] [name] - subtract [wav1] from [wav2]",
+        " - op add [wav1] [wav2] [name] - add [wav1] and [wav2] values",
+        " - op sub [wav1] [wav2] [name] - subtract [wav1] values from [wav2]",
         " - op norm [wav] [name] - normalise [wav]",
         " - op scale [wav] [amount] [name] - scale [wav] by [amount]",
         " - op stretch [wav] [amount] [name] - stretch [wav] by [amount]",
+        " - op append [wav1] [wav2] [name] - append [wav1] to [wav2]",
         " - print [wav] - print the waveform [wav]",
         " - save [wav] [file] - save the waveform [wav] to [file]",
         " - list - list loaded waveforms",
@@ -85,6 +86,10 @@ def handle_operators(
             wav = wavs[args[0]]
             factor = float(args[1])
             return op.stretch(wav, factor)
+        case "append":
+            wav1 = wavs[args[0]]
+            wav2 = wavs[args[1]]
+            return op.append(wav1, wav2)
         case _:
             raise InvalidInput("Unknown operator kind")
 
@@ -123,8 +128,8 @@ def main() -> None:
                 case "g" | "gen":
                     kind = args[0]
                     freq = int(args[1])
-                    length = float(args[1])
-                    name = args[2]
+                    length = float(args[2])
+                    name = args[3]
                     wavs[name] = handle_generators(kind, freq, length)
                 case "o" | "op":
                     kind, *args, name = args
