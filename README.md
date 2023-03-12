@@ -23,6 +23,6 @@ Enter a command: op append seq evs seq
 Enter a command: op append seq silence seq
 Enter a command: op append seq e seq
 Enter a command: save seq test.wav
-Enter a command: Ctrl+D
+Enter a command: quit
 Goodbye!
 ```

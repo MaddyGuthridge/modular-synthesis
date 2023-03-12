@@ -1,0 +1,15 @@
+gen sine 220 1 a
+gen sine 330 1 e
+op append a e seq
+gen sine 220 0.166667 as
+gen sine 165 0.166667 els
+op append seq as seq
+op append seq els seq
+op append seq as seq
+gen sine 330 0.1 evs
+gen sine 330 0.066667 silence
+op scale silence 0 silence
+op append seq evs seq
+op append seq silence seq
+op append seq e seq
+save seq test.wav
