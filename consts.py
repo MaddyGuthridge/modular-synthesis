@@ -1,3 +1,9 @@
+"""
+consts
+======
+
+Constants used by the app
+"""
 
 # Generating waveforms
 # ====================
