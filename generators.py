@@ -6,6 +6,7 @@ Code for generating waveforms
 """
 import math
 from consts import SAMPLE_RATE, Waveform
+from operators import scale
 
 
 def sine(frequency: int, length: float) -> Waveform:
@@ -37,6 +38,13 @@ def saw(frequency: int, length: float) -> Waveform:
             - 1  # subtract 1
         ))
     return samples
+
+
+def tri(frequency: int, length: float) -> Waveform:
+    """
+    Generate a triangle wave at the given frequency
+    """
+    return scale([abs(x) - 0.5 for x in saw(frequency, length)], 2)
 
 
 def square(frequency: int, length: float) -> Waveform:
