@@ -60,6 +60,8 @@ def handle_generators(kind: str, freq: int, length: float) -> Waveform:
             generator = gen.square
         case "triangle":
             generator = gen.tri
+        case "circle":
+            generator = gen.circle
         case _:
             raise InvalidInput("Unknown generator kind")
     return generator(freq, length)

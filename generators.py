@@ -59,3 +59,13 @@ def square(frequency: int, length: float) -> Waveform:
         else:
             samples.append(-1.0)
     return samples
+
+def circle(frequency: int, length:float) -> Waveform:
+    """
+    Generate a circle wave at the given frequency
+    """
+    return [
+        x[0]*x[1] for x in zip(
+            square(frequency,length),
+            [math.sin(math.acos(x)) for x in tri(frequency,length)]
+        )]
