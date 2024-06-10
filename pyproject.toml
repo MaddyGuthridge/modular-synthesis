@@ -2,7 +2,7 @@
 name = "modular-synthesis"
 version = "1.0.0"
 description = "A simple program for generating and manipulating waveforms"
-authors = ["Miguel Guthridge <hdsq@outlook.com.au>"]
+authors = ["Maddy Guthridge <hello@maddyguthrudge.com>"]
 license = "MIT"
 readme = "README.md"
 packages = [{include = "modular_synthesis"}]

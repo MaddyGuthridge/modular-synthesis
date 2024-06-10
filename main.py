@@ -7,7 +7,7 @@ A simple program for generating and manipulating waveforms.
 This project isn't intended to be performant. It's just a little demo I made
 for fun.
 
-Made with <3 by Miguel Guthridge
+Made with <3 by Maddy Guthridge
 """
 import sys
 import wave
